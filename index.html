@@ -2,8 +2,9 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>5/1–5/2 行程</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <title>5/1–5/3 行程</title>
   <style>
     :root {
       --bg: #eef4f5;
@@ -18,34 +19,61 @@
       --radius-xl: 30px;
       --radius-lg: 24px;
       --radius-md: 18px;
+      /* Google Maps 商家／使用者相片（高解析載入參數） */
+      --photo-orange-tx: url("https://lh3.googleusercontent.com/p/AF1QipNEx9OBr4pbcMdCuHDXy6S8TUB8CL4obzLKkSW2=w960-h720-k-no");
+      --photo-hanxi: url("https://lh3.googleusercontent.com/gps-cs-s/AHVAweqTLOntoUcF2KNivwJDZYgxO8tk8DmETJ8MnydOigpi34DsFGOtSi1kNG0eX_rMPB5HpJV4-tVVcvf9IFlAjv_DKOpSvs5g168IBtnsdROfxsk365L0tc7oGcQHwX5t_oHSlZ-f=w960-h720-k-no");
     }
 
-    * { box-sizing: border-box; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
 
     body {
       margin: 0;
+      overflow-x: hidden;
       font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top right, rgba(134,182,191,0.20), transparent 22%),
-        linear-gradient(180deg, #edf5f6 0%, #f8f7f2 100%);
+        radial-gradient(ellipse 130% 90% at 50% -25%, rgba(72, 128, 130, 0.22), transparent 52%),
+        radial-gradient(circle at 100% 20%, rgba(164, 202, 204, 0.38), transparent 38%),
+        radial-gradient(circle at 0% 80%, rgba(190, 216, 214, 0.28), transparent 40%),
+        linear-gradient(168deg, #d8e6e8 0%, #e5eef0 38%, #eef6f4 72%, #f0f3ee 100%);
+    }
+
+    html.deck-mode body {
+      background:
+        radial-gradient(ellipse 120% 70% at 50% -15%, rgba(60, 118, 120, 0.2), transparent 50%),
+        radial-gradient(circle at 100% 35%, rgba(150, 192, 192, 0.45), transparent 45%),
+        linear-gradient(175deg, #cfdedb 0%, #dfecec 45%, #e8f2f1 100%);
     }
 
     .wrap {
       max-width: 1100px;
       margin: 0 auto;
       padding: 28px 16px 54px;
+      padding-top: calc(28px + env(safe-area-inset-top, 0px));
+      padding-right: calc(16px + env(safe-area-inset-right, 0px));
+      padding-bottom: calc(54px + env(safe-area-inset-bottom, 0px));
+      padding-left: calc(16px + env(safe-area-inset-left, 0px));
+      min-width: 0;
     }
 
     .hero {
       position: relative;
       overflow: hidden;
       border-radius: var(--radius-xl);
-      padding: 34px 30px 26px;
+      padding: 34px 24px 26px;
       color: #fff;
       background:
         linear-gradient(135deg, rgba(25,57,60,0.72), rgba(48,103,108,0.58)),
-        url("https://images.pexels.com/photos/2387871/pexels-photo-2387871.jpeg?auto=compress&cs=tinysrgb&w=1400") center/cover no-repeat;
+        url("https://upload.wikimedia.org/wikipedia/commons/e/e6/Overlooking_Sun_Moon_Lake_with_Ita_Thao_in_the_distance.jpg") center/cover no-repeat;
       box-shadow: var(--shadow);
     }
 
@@ -62,24 +90,36 @@
       z-index: 1;
     }
 
-    .eyebrow {
-      display: inline-flex;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.12);
-      backdrop-filter: blur(10px);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.4px;
-      margin-bottom: 14px;
+    .hero-headline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
     }
 
-    .hero h1 {
-      margin: 0 0 10px;
+    .hero-headline h1 {
+      margin: 0;
+      flex: 1;
+      min-width: 0;
       font-size: clamp(30px, 5vw, 44px);
       line-height: 1.08;
       letter-spacing: 0.2px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.16);
+      backdrop-filter: blur(10px);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .hero p {
@@ -90,10 +130,19 @@
       color: rgba(255,255,255,0.92);
     }
 
+    .hero-deck-tagline {
+      display: none;
+    }
+
+    /* 桌機：不影響排版；簡報模式再改為區塊並加水平內距 */
+    .hero-inner-pad {
+      display: contents;
+    }
+
     .tab-bar {
       display: flex;
       gap: 12px;
-      margin-top: 24px;
+      margin-top: 0;
     }
 
     .tab-btn {
@@ -108,6 +157,9 @@
       color: rgba(255,255,255,0.92);
       border: 1px solid rgba(255,255,255,0.16);
       backdrop-filter: blur(10px);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: rgba(255,255,255,0.12);
+      min-width: 0;
     }
 
     .tab-btn strong {
@@ -122,6 +174,8 @@
       font-size: 13px;
       color: rgba(255,255,255,0.82);
       line-height: 1.6;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .tab-btn.active {
@@ -151,19 +205,21 @@
     .slide-cover {
       position: relative;
       min-height: 300px;
-      padding: 28px;
+      padding: 28px 24px 24px;
       display: flex;
       align-items: flex-end;
       background-position: center;
       background-size: cover;
       background-repeat: no-repeat;
+      /* 遠端圖載入失敗時至少仍有底色（file:// 或封鎖外部圖時常見） */
+      background-color: #3d5c5f;
     }
 
     .slide-cover::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(23,41,44,0.10) 0%, rgba(18,28,31,0.62) 100%);
+      background: linear-gradient(180deg, rgba(23,41,44,0.05) 0%, rgba(18,28,31,0.38) 55%, rgba(18,28,31,0.52) 100%);
     }
 
     .slide-content {
@@ -171,6 +227,8 @@
       z-index: 1;
       color: #fff;
       max-width: 780px;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .slide-label {
@@ -198,25 +256,91 @@
       color: rgba(255,255,255,0.92);
     }
 
-    .meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      padding: 18px 24px 0;
+    .meta-panel {
+      margin: 16px 20px 0;
+      padding: 16px 18px 18px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,251,251,0.92));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
     }
 
-    .chip {
-      padding: 9px 13px;
-      border-radius: 999px;
-      background: rgba(47,111,115,0.08);
-      border: 1px solid rgba(47,111,115,0.12);
-      color: var(--primary);
+    .meta-panel summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .meta-panel summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .meta-panel-title {
+      margin: 0 0 10px;
       font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+      color: var(--primary-dark);
+      text-transform: uppercase;
+    }
+
+    .meta-panel summary .meta-panel-title {
+      margin: 0;
+    }
+
+    .meta-panel-chev {
+      flex-shrink: 0;
+      font-size: 11px;
       font-weight: 800;
+      color: var(--muted);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    @media (min-width: 721px) {
+      .meta-panel summary {
+        cursor: default;
+        pointer-events: none;
+        padding: 0;
+        margin: 0 0 10px;
+      }
+
+      .meta-panel-chev {
+        display: none;
+      }
+    }
+
+    .meta-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .meta-list li {
+      margin: 0;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(47,111,115,0.06);
+      border: 1px solid rgba(47,111,115,0.10);
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text);
+      overflow-wrap: anywhere;
+    }
+
+    .meta-list strong {
+      color: var(--primary-dark);
+      font-weight: 900;
     }
 
     .body {
-      padding: 22px 24px 28px;
+      padding: 22px 22px 28px;
+      min-width: 0;
     }
 
     .section-title {
@@ -232,6 +356,7 @@
       padding-left: 18px;
       margin: 0;
       list-style: none;
+      min-width: 0;
     }
 
     .timeline::before {
@@ -247,9 +372,10 @@
     .item {
       position: relative;
       display: grid;
-      grid-template-columns: 190px 1fr;
+      grid-template-columns: minmax(0, 190px) minmax(0, 1fr);
       gap: 14px;
       align-items: stretch;
+      min-width: 0;
     }
 
     .item::before {
@@ -268,6 +394,8 @@
     .thumb {
       position: relative;
       min-height: 138px;
+      width: 100%;
+      max-width: 100%;
       border-radius: 18px;
       overflow: hidden;
       background-position: center;
@@ -297,6 +425,9 @@
       font-weight: 900;
       letter-spacing: 0.2px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.10);
+      max-width: calc(100% - 24px);
+      overflow-wrap: anywhere;
+      line-height: 1.3;
     }
 
     .info {
@@ -305,13 +436,15 @@
       border-radius: 18px;
       padding: 16px 16px 14px;
       box-shadow: var(--shadow-soft);
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .time {
       display: inline-flex;
       align-items: center;
       min-height: 34px;
-      padding: 0 12px;
+      padding: 8px 12px;
       border-radius: 999px;
       background: rgba(47,111,115,0.10);
       border: 1px solid rgba(47,111,115,0.14);
@@ -319,6 +452,9 @@
       font-size: 13px;
       font-weight: 900;
       margin-bottom: 10px;
+      max-width: 100%;
+      white-space: normal;
+      text-align: left;
     }
 
     .title {
@@ -327,66 +463,106 @@
       font-weight: 900;
       margin-bottom: 8px;
       color: var(--text);
+      overflow-wrap: anywhere;
     }
 
     .desc {
       font-size: 14px;
       line-height: 1.85;
       color: var(--muted);
+      overflow-wrap: anywhere;
     }
 
-    .tips {
-      margin-top: 22px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
+    .nav-row {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
     }
 
-    .tip {
-      padding: 18px;
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,251,251,0.94));
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow-soft);
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      min-height: 44px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow: 0 8px 18px rgba(36, 79, 82, 0.28);
+      transition: transform 0.15s ease, filter 0.15s ease;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: rgba(255,255,255,0.15);
+      text-align: center;
+      max-width: 100%;
     }
 
-    .tip h3 {
-      margin: 0 0 8px;
-      font-size: 15px;
-      color: var(--primary-dark);
+    .nav-btn:hover {
+      filter: brightness(1.04);
+      transform: translateY(-1px);
     }
 
-    .tip p {
-      margin: 0;
-      font-size: 14px;
-      line-height: 1.8;
+    .nav-btn:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    .nav-hint {
+      flex: 1 1 100%;
+      font-size: 12px;
+      line-height: 1.5;
       color: var(--muted);
     }
 
+    .nav-hint.is-block {
+      margin: 8px 0 0;
+    }
+
+    /* 每日橫幅：Wikimedia 原檔直連（/thumb/ 縮圖路徑在部分環境較易 404） */
     .cover-d1 {
       background-image:
-        linear-gradient(135deg, rgba(17,33,35,0.12), rgba(17,33,35,0.08)),
-        url("https://images.pexels.com/photos/29673527/pexels-photo-29673527.jpeg?auto=compress&cs=tinysrgb&w=1400");
+        linear-gradient(135deg, rgba(17,33,35,0.10), rgba(17,33,35,0.06)),
+        url("https://upload.wikimedia.org/wikipedia/commons/e/e6/Overlooking_Sun_Moon_Lake_with_Ita_Thao_in_the_distance.jpg");
     }
 
     .cover-d2 {
       background-image:
-        linear-gradient(135deg, rgba(17,33,35,0.12), rgba(17,33,35,0.08)),
-        url("https://images.pexels.com/photos/1658967/pexels-photo-1658967.jpeg?auto=compress&cs=tinysrgb&w=1400");
+        linear-gradient(135deg, rgba(17,33,35,0.10), rgba(17,33,35,0.06)),
+        url("https://upload.wikimedia.org/wikipedia/commons/b/b1/Cingjing_Farm_gate_after_rain_on_1st_June_2021.jpg");
     }
 
-    .img-train { background-image: url("https://images.pexels.com/photos/167698/pexels-photo-167698.jpeg?auto=compress&cs=tinysrgb&w=900"); }
-    .img-road { background-image: url("https://images.pexels.com/photos/315938/pexels-photo-315938.jpeg?auto=compress&cs=tinysrgb&w=900"); }
-    .img-jiuzu { background-image: url("https://images.pexels.com/photos/2265876/pexels-photo-2265876.jpeg?auto=compress&cs=tinysrgb&w=900"); }
-    .img-lunch { background-image: url("https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?auto=compress&cs=tinysrgb&w=900"); }
-    .img-hotel { background-image: url("https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=900"); }
-    .img-lake { background-image: url("https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg?auto=compress&cs=tinysrgb&w=900"); }
-    .img-pier { background-image: url("https://images.pexels.com/photos/1366909/pexels-photo-1366909.jpeg?auto=compress&cs=tinysrgb&w=900"); }
-    .img-night { background-image: url("https://images.pexels.com/photos/311012/pexels-photo-311012.jpeg?auto=compress&cs=tinysrgb&w=900"); }
-    .img-mountain { background-image: url("https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=900"); }
-    .img-farm { background-image: url("https://images.pexels.com/photos/248837/pexels-photo-248837.jpeg?auto=compress&cs=tinysrgb&w=900"); }
-    .img-city { background-image: url("https://images.pexels.com/photos/338515/pexels-photo-338515.jpeg?auto=compress&cs=tinysrgb&w=900"); }
-    .img-market { background-image: url("https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=900"); }
+    .cover-d3 {
+      background-image:
+        linear-gradient(135deg, rgba(17,33,35,0.10), rgba(17,33,35,0.06)),
+        url("https://upload.wikimedia.org/wikipedia/commons/8/88/Park_Lane_by_CMP_20170206.jpg");
+    }
+
+    /* 行程縮圖：來源為 Wikimedia Commons（台灣景點實拍／街景） */
+    .img-train { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/THSR_Hsinchu_Station_2024-01-06.jpg/960px-THSR_Hsinchu_Station_2024-01-06.jpg"); }
+    .img-road { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/20251128_121054_Nantou_Provincial_Highway_14.jpg/960px-20251128_121054_Nantou_Provincial_Highway_14.jpg"); }
+    .img-jiuzu { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Formosan_Aboriginal_Culture_Village%2C_Nantou_%281%29.jpg/960px-Formosan_Aboriginal_Culture_Village%2C_Nantou_%281%29.jpg"); }
+    .img-lunch { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Culture_Square_%28Formosan_Aboriginal_Culture_Village%29.JPG/960px-Culture_Square_%28Formosan_Aboriginal_Culture_Village%29.JPG"); }
+    .img-hotel { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/View_of_Sun_Moon_Lake_from_Ita_Thao.jpg/960px-View_of_Sun_Moon_Lake_from_Ita_Thao.jpg"); }
+    .img-lake { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/View_of_Sun_Moon_Lake_from_Ita_Thao.jpg/960px-View_of_Sun_Moon_Lake_from_Ita_Thao.jpg"); }
+    .img-pier { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/View_from_Ita_Thao_Pier.jpg/960px-View_from_Ita_Thao_Pier.jpg"); }
+    .img-night { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/20161209_Multilingual_signs_at_Ita_Thao%2C_Sun_Moon_Lake_%E6%97%A5%E6%9C%88%E6%BD%AD%E4%BC%8A%E9%81%94%E9%82%B5%E5%A4%9A%E8%AA%9E%E6%A8%99%E8%AA%8C.jpg/960px-20161209_Multilingual_signs_at_Ita_Thao%2C_Sun_Moon_Lake_%E6%97%A5%E6%9C%88%E6%BD%AD%E4%BC%8A%E9%81%94%E9%82%B5%E5%A4%9A%E8%AA%9E%E6%A8%99%E8%AA%8C.jpg"); }
+    .img-mountain { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Evergreen_grassland.jpg/960px-Evergreen_grassland.jpg"); }
+    .img-farm { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/%E9%9D%92%E9%9D%92%E8%8D%89%E5%8E%9F_Green_Green_Grasslands_-_panoramio.jpg/960px-%E9%9D%92%E9%9D%92%E8%8D%89%E5%8E%9F_Green_Green_Grasslands_-_panoramio.jpg"); }
+    .img-city { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Taichung_Skyline.jpg/960px-Taichung_Skyline.jpg"); }
+    .img-hsr-tc { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Taiwan_High_Speed_Rail_train_157_at_Taichung_HSR_station_March_2026_1.jpg/960px-Taiwan_High_Speed_Rail_train_157_at_Taichung_HSR_station_March_2026_1.jpg"); }
+    .img-market { background-image: var(--photo-hanxi); }
+    .img-hotel-tx { background-image: var(--photo-orange-tx); }
+    .img-greenway { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Calligraphy_Greenway_Square.jpg/960px-Calligraphy_Greenway_Square.jpg"); }
+    .img-shenji { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Shenji_New_Village_201905.jpg/960px-Shenji_New_Village_201905.jpg"); }
+    .img-parklane { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Entrance_of_Park_Lane_by_CMP.jpg/960px-Entrance_of_Park_Lane_by_CMP.jpg"); }
+    .img-tea { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Kashiraniku_001.jpg/960px-Kashiraniku_001.jpg"); }
+    .img-meet { background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/View_of_Park_Lane_by_CMP_from_Gongyi_Road%2C_Taichung.jpg/960px-View_of_Park_Lane_by_CMP_from_Gongyi_Road%2C_Taichung.jpg"); }
 
     @media (max-width: 880px) {
       .item {
@@ -396,15 +572,15 @@
       .thumb {
         min-height: 190px;
       }
-
-      .tips {
-        grid-template-columns: 1fr;
-      }
     }
 
     @media (max-width: 720px) {
       .wrap {
         padding: 18px 12px 36px;
+        padding-top: calc(18px + env(safe-area-inset-top, 0px));
+        padding-right: calc(12px + env(safe-area-inset-right, 0px));
+        padding-bottom: calc(36px + env(safe-area-inset-bottom, 0px));
+        padding-left: calc(12px + env(safe-area-inset-left, 0px));
       }
 
       .hero,
@@ -420,27 +596,424 @@
         flex-direction: column;
       }
 
-      .slide-cover {
-        min-height: 250px;
-        padding: 20px 18px;
+      .tab-btn {
+        width: 100%;
+        flex: none;
+        min-height: 48px;
       }
 
-      .meta-row,
+      .slide-cover {
+        min-height: min(260px, 42vw + 140px);
+        padding: 20px 18px 18px;
+      }
+
+      .slide-content h2 {
+        font-size: clamp(22px, 6.4vw, 34px);
+      }
+
+      .slide-content p {
+        font-size: 14px;
+      }
+
+      .meta-panel {
+        margin-left: 16px;
+        margin-right: 16px;
+      }
+
       .body {
-        padding-left: 18px;
-        padding-right: 18px;
+        padding: 20px 16px 26px;
+      }
+
+      .section-title {
+        font-size: 19px;
       }
 
       .timeline {
-        padding-left: 16px;
+        padding-left: 14px;
       }
 
       .item::before {
-        left: -14px;
+        left: -12px;
       }
 
       .thumb {
-        min-height: 170px;
+        min-height: 160px;
+        aspect-ratio: 16 / 9;
+      }
+
+      .nav-row .nav-btn {
+        flex: 1 1 100%;
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .hero-headline h1 {
+        font-size: clamp(26px, 8vw, 36px);
+      }
+
+      .meta-list li,
+      .time {
+        font-size: 12px;
+      }
+
+      .title {
+        font-size: 16px;
+      }
+    }
+
+    /* —— 手機「簡報式」時間軸：懸浮切換（僅在 deck-mode 由 JS 開啟） —— */
+    .timeline-deck {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      align-items: stretch;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px max(12px, env(safe-area-inset-right, 0px))
+        calc(12px + env(safe-area-inset-bottom, 0px))
+        max(12px, env(safe-area-inset-left, 0px));
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(248, 251, 251, 0.88) 28%,
+        rgba(255, 255, 255, 0.96) 100%
+      );
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-top: 1px solid var(--line);
+      box-shadow: 0 -16px 40px rgba(23, 43, 47, 0.12);
+    }
+
+    .timeline-deck.is-visible {
+      display: flex;
+    }
+
+    .timeline-deck__nav {
+      flex: 0 0 auto;
+      width: 48px;
+      min-height: 48px;
+      border: 0;
+      border-radius: 14px;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--primary-dark);
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.12s ease, background 0.12s ease;
+    }
+
+    .timeline-deck__nav:active:not(:disabled) {
+      transform: scale(0.96);
+    }
+
+    .timeline-deck__nav:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .timeline-deck__meta {
+      flex: 1 1 auto;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 4px;
+    }
+
+    .timeline-deck__dots {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      max-width: 100%;
+      overflow-x: auto;
+      padding: 6px 4px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .timeline-deck__dots::-webkit-scrollbar {
+      display: none;
+    }
+
+    .timeline-deck__dot {
+      flex: 0 0 auto;
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      border: 0;
+      padding: 0;
+      background: rgba(47, 111, 115, 0.3);
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      transition:
+        transform 0.15s ease,
+        background 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+
+    .timeline-deck__dot.is-active {
+      background: var(--primary);
+      box-shadow: 0 0 0 3px rgba(47, 111, 115, 0.25);
+      transform: scale(1.2);
+    }
+
+    .timeline-deck__dot:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    .timeline-deck__count {
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      color: var(--primary);
+    }
+
+    .timeline-deck__subtitle {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.35;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
+    .timeline-deck__hint {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    @media (max-width: 720px) {
+      html.deck-mode .timeline.timeline--deck {
+        padding-left: 0;
+        gap: 0;
+      }
+
+      html.deck-mode .timeline.timeline--deck::before {
+        display: none;
+      }
+
+      html.deck-mode .timeline.timeline--deck > .item::before {
+        display: none;
+      }
+
+      html.deck-mode .timeline.timeline--deck > .item {
+        display: none;
+        margin: 0;
+      }
+
+      html.deck-mode .timeline.timeline--deck > .item.is-deck-active {
+        display: grid;
+      }
+
+      html.deck-mode .timeline.timeline--deck > .item.is-deck-active .thumb {
+        min-height: 0;
+        max-height: min(42vw, 200px);
+        aspect-ratio: 16 / 9;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        html.deck-mode .timeline.timeline--deck > .item.is-deck-active {
+          animation: deck-card-in 0.2s ease-out;
+        }
+      }
+
+      /* 簡報模式：隱藏與分頁重複的 Day 前綴（桌機仍顯示於標題與重點列） */
+      html.deck-mode .deck-full-label {
+        display: none;
+      }
+
+      /* 簡報模式：主欄左右貼齊螢幕，與全寬 Hero / Panel 一致（避免「頭寬身窄」） */
+      html.deck-mode .wrap {
+        padding-top: calc(10px + env(safe-area-inset-top, 0px));
+        padding-left: 0;
+        padding-right: 0;
+        padding-bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+      }
+
+      html.deck-mode .hero-inner-pad {
+        display: block;
+        padding-left: max(18px, env(safe-area-inset-left, 0px) + 8px);
+        padding-right: max(18px, env(safe-area-inset-right, 0px) + 8px);
+      }
+
+      html.deck-mode .hero {
+        position: relative;
+        width: 100%;
+        max-width: none;
+        margin-left: 0;
+        margin-right: 0;
+        /* padding: 16px 0 14px; */
+        min-height: 138px;
+        /* border-radius: 0 0 24px 24px; */
+        box-shadow: 0 14px 36px rgba(18, 35, 38, 0.18);
+      }
+
+      html.deck-mode .hero-deck-tagline {
+        display: block;
+        margin: 0 0 12px;
+        max-width: 36em;
+        font-size: 12px;
+        line-height: 1.55;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.88);
+        opacity: 0.95;
+      }
+
+      html.deck-mode .hero-headline {
+        margin-bottom: 12px;
+        align-items: center;
+      }
+
+      html.deck-mode .eyebrow {
+        font-size: 11px;
+        padding: 6px 11px;
+        opacity: 0.95;
+      }
+
+      html.deck-mode .hero-headline h1 {
+        font-size: clamp(22px, 5.8vw, 28px);
+        font-weight: 900;
+        letter-spacing: 0.03em;
+      }
+
+      html.deck-mode .tab-bar {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 8px;
+        margin-top: 0;
+        width: 100%;
+        box-sizing: border-box;
+        padding-left: max(12px, env(safe-area-inset-left, 0px) + 6px);
+        padding-right: max(12px, env(safe-area-inset-right, 0px) + 6px);
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      html.deck-mode .tab-bar::-webkit-scrollbar {
+        display: none;
+      }
+
+      html.deck-mode .tab-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1 1 0;
+        min-width: 76px;
+        min-height: 42px;
+        padding: 10px 14px;
+        border-radius: 14px;
+        text-align: center;
+      }
+
+      html.deck-mode .tab-btn strong {
+        font-size: 14px;
+        font-weight: 900;
+        margin-bottom: 0;
+        white-space: nowrap;
+      }
+
+      html.deck-mode .tab-btn span {
+        display: none;
+      }
+
+      html.deck-mode .panel {
+        margin-top: 10px;
+        margin-left: 0;
+        margin-right: 0;
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 10px 28px rgba(23, 43, 47, 0.07);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.93), rgba(245, 250, 249, 0.9));
+        border-color: rgba(47, 111, 115, 0.12);
+        border-left: 0;
+        border-right: 0;
+      }
+
+      html.deck-mode .info {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(238, 247, 246, 0.88));
+        border-color: rgba(47, 111, 115, 0.11);
+      }
+
+      html.deck-mode .thumb {
+        border-color: rgba(47, 111, 115, 0.12);
+      }
+
+      /* 每日第二張全寬大圖：手機簡報模式隱藏（已由分頁 + 縮圖卡片呈現主題） */
+      html.deck-mode .slide-cover {
+        display: none !important;
+      }
+
+      /* 簡報模式：重點改為常駐列表，不顯示摺疊列（與主內容同一水平內距） */
+      html.deck-mode .meta-panel {
+        margin-top: 12px;
+        margin-bottom: 0;
+        margin-inline: max(16px, env(safe-area-inset-left, 0px) + 4px)
+          max(16px, env(safe-area-inset-right, 0px) + 4px);
+        padding: 10px 14px 10px;
+        box-shadow: none;
+        border: 1px solid rgba(47, 111, 115, 0.14);
+        border-radius: 16px;
+        background: linear-gradient(165deg, rgba(228, 241, 240, 0.88), rgba(255, 255, 255, 0.72));
+      }
+
+      html.deck-mode .meta-panel summary,
+      html.deck-mode .meta-panel-chev {
+        display: none !important;
+      }
+
+      html.deck-mode .meta-panel .meta-list {
+        padding: 0;
+        gap: 8px;
+      }
+
+      html.deck-mode .meta-panel .meta-list li {
+        padding: 9px 11px;
+        font-size: 12px;
+        background: rgba(255, 255, 255, 0.72);
+        border-color: rgba(47, 111, 115, 0.1);
+      }
+
+      html.deck-mode .body {
+        padding: 12px max(16px, env(safe-area-inset-right, 0px) + 4px) 22px
+          max(16px, env(safe-area-inset-left, 0px) + 4px);
+      }
+
+      html.deck-mode .body .section-title {
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+    }
+
+    @keyframes deck-card-in {
+      from {
+        opacity: 0.65;
+        transform: translateX(10px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
       }
     }
   </style>
@@ -449,16 +1022,27 @@
   <div class="wrap">
     <section class="hero">
       <div class="hero-inner">
-        <div class="eyebrow">TRAVEL PLAN / 4 人行程</div>
-        <h1>5/1–5/2 小旅行</h1>
+        <div class="hero-inner-pad">
+          <div class="hero-headline">
+            <h1>小旅行</h1>
+            <div class="eyebrow">5/1–5/3</div>
+          </div>
+          <p class="hero-deck-tagline">
+            上方切換 Day，下方時間軸可用圓點或左右滑切換每一段。
+          </p>
+        </div>
         <div class="tab-bar">
           <button class="tab-btn active" data-tab="d1">
-            <strong>D1｜5/1</strong>
-            <span>九族文化村 → 湖悦景觀旅店 → 伊達邵碼頭</span>
+            <strong>Day 1</strong>
+            <span>5/1 · 九族 → 住湖悅 → 伊達邵傍晚散步</span>
           </button>
           <button class="tab-btn" data-tab="d2">
-            <strong>D2｜5/2</strong>
-            <span>清境農場 → 台中住宿 → 夜市收尾</span>
+            <strong>Day 2</strong>
+            <span>5/2 · 清境 → 回台中（可順路停）→ 旱溪夜市 → 兩人住橙居</span>
+          </button>
+          <button class="tab-btn" data-tab="d3">
+            <strong>Day 3</strong>
+            <span>5/3 · 飯店早餐 → 西區散步 → 茶六午餐 → 找家家</span>
           </button>
         </div>
       </div>
@@ -468,43 +1052,54 @@
       <div class="slide-cover cover-d1">
         <div class="slide-content">
           <div class="slide-label">DAY 1 / PLAY & STAY</div>
-          <h2>九族文化村 × 湖悦景觀旅店</h2>
-          <p>第一天用「先玩、再入住、晚上放鬆」的節奏安排，白天把九族玩順，傍晚後把日月潭最有感的湖景與碼頭氛圍留給你們慢慢享受。</p>
+          <h2>九族 × 湖悅景觀旅店</h2>
+          <p>流程很單純：白天玩九族 → 下午 check-in 湖悅 → 晚上步行到伊達邵看湖、吃晚餐，不趕路。</p>
         </div>
       </div>
 
-      <div class="meta-row">
-        <div class="chip">4 人同行</div>
-        <div class="chip">湖悦入住 15:00</div>
-        <div class="chip">退房 11:00</div>
-        <div class="chip">步行到伊達邵碼頭很近</div>
-      </div>
+      <details class="meta-panel">
+        <summary>
+          <span class="meta-panel-title"><span class="deck-full-label">Day 1｜</span>重點</span>
+          <span class="meta-panel-chev" aria-hidden="true"></span>
+        </summary>
+        <ul class="meta-list">
+          <li><strong>住</strong> 湖悅景觀旅店（湖岸第一排）｜入住 15:00、退房 11:00</li>
+          <li><strong>順序</strong> 九族 → 湖悅 → 伊達邵碼頭／商圈晚餐</li>
+          <li><strong>晚上</strong> 飯店離碼頭近，多用走的即可</li>
+        </ul>
+      </details>
 
       <div class="body">
-        <h3 class="section-title">Day 1 行程時間軸</h3>
+        <h3 class="section-title"><span class="deck-full-label">Day 1 </span>時間軸</h3>
         <ol class="timeline">
           <li class="item">
             <div class="thumb img-train"><div class="thumb-label">新竹高鐵出發</div></div>
             <div class="info">
               <div class="time">08:00–09:00</div>
-              <div class="title">新竹高鐵出發，前往台中</div>
-              <div class="desc">建議搭早上班次，抓一個舒服但不會太晚的節奏。抵達台中後與朋友會合，整理行李、上車出發。</div>
+              <div class="title">新竹高鐵 → 台中</div>
+              <div class="desc">抓早一點的高鐵；到台中與同伴會合後上車出發。</div>
+              <div class="nav-row">
+                <a class="nav-btn" data-nav="高鐵新竹站" href="#" target="_blank" rel="noopener noreferrer">開車導航</a>
+              </div>
             </div>
           </li>
           <li class="item">
-            <div class="thumb img-road"><div class="thumb-label">台中會合後開車</div></div>
+            <div class="thumb img-hsr-tc"><div class="thumb-label">台中高鐵會合</div></div>
             <div class="info">
               <div class="time">09:20–10:30</div>
-              <div class="title">台中高鐵站會合後，直接開車前往九族文化村</div>
-              <div class="desc">從台中高鐵站到九族大約 1 小時左右。先玩九族會比先去飯店更順，因為飯店要下午 3 點後才能入住。</div>
+              <div class="title">台中高鐵會合 → 開往九族</div>
+              <div class="desc">車程約 1 小時。飯店 15:00 後才能入住，故先玩九族。</div>
             </div>
           </li>
           <li class="item">
             <div class="thumb img-jiuzu"><div class="thumb-label">九族文化村</div></div>
             <div class="info">
               <div class="time">10:30–12:30</div>
-              <div class="title">九族文化村上半場</div>
-              <div class="desc">一進園區先玩你們最想玩的設施，熱門點優先。4 個人盡量一起行動，比較好控時間，也方便拍照。</div>
+              <div class="title">九族（上午）</div>
+              <div class="desc">進園先衝最想玩的；四人同行較好抓時間。</div>
+              <div class="nav-row">
+                <a class="nav-btn" data-nav="九族文化村　南投縣魚池鄉大林村金天巷45號" href="#" target="_blank" rel="noopener noreferrer">開車導航｜九族</a>
+              </div>
             </div>
           </li>
           <li class="item">
@@ -512,69 +1107,62 @@
             <div class="info">
               <div class="time">12:30–13:30</div>
               <div class="title">園區內午餐</div>
-              <div class="desc">午餐以方便快速為主，不建議排太久。保留體力給下午與晚上的湖景行程。</div>
+              <div class="desc">園內簡單吃、別排太久，留體力給下午與晚上。（人在園區，無導航鈕）</div>
             </div>
           </li>
           <li class="item">
             <div class="thumb img-jiuzu"><div class="thumb-label">九族續玩</div></div>
             <div class="info">
               <div class="time">13:30–15:00</div>
-              <div class="title">九族文化村下半場</div>
-              <div class="desc">補拍照點、散步區，或把上午沒玩到的設施補完。抓 15:00 左右離園最剛好。</div>
+              <div class="title">九族（下午）</div>
+              <div class="desc">補設施或拍照；約 15:00 離園最剛好。（無導航鈕）</div>
             </div>
           </li>
           <li class="item">
-            <div class="thumb img-hotel"><div class="thumb-label">湖悦景觀旅店</div></div>
+            <div class="thumb img-hotel"><div class="thumb-label">湖悅景觀旅店</div></div>
             <div class="info">
               <div class="time">15:00–15:20</div>
-              <div class="title">前往湖悦景觀旅店，辦理入住</div>
-              <div class="desc">目前查到的資訊是入住時間下午 3:00、退房上午 11:00。位置靠近伊達邵碼頭，晚上很方便。</div>
-            </div>
-          </li>
-          <li class="item">
-            <div class="thumb img-lake"><div class="thumb-label">湖景房放鬆</div></div>
-            <div class="info">
-              <div class="time">15:20–17:00</div>
-              <div class="title">進房休息、看湖景、整理一下</div>
-              <div class="desc">這段建議不要再塞景點，讓大家先休息、放空一下，整天的質感會直接提升很多。</div>
+              <div class="title">湖悅 check-in</div>
+              <div class="desc">湖岸第一排；入住 15:00、退房 11:00。可先回房休息，傍晚再步行去碼頭。</div>
+              <div class="nav-row">
+                <a class="nav-btn" data-nav="湖悅景觀旅店　南投縣魚池鄉義勇街113號" href="#" target="_blank" rel="noopener noreferrer">開車導航｜湖悅</a>
+              </div>
             </div>
           </li>
           <li class="item">
             <div class="thumb img-pier"><div class="thumb-label">伊達邵碼頭</div></div>
             <div class="info">
               <div class="time">17:00–18:30</div>
-              <div class="title">伊達邵碼頭散步、拍照</div>
-              <div class="desc">飯店步行到碼頭很近，傍晚出去晃晃最舒服，也是第一天最有日月潭感的一段。</div>
+              <div class="title">伊達邵碼頭</div>
+              <div class="desc">從飯店走過去不遠；傍晚最舒服。</div>
+              <div class="nav-row">
+                <a class="nav-btn" data-nav="伊達邵碼頭" href="#" target="_blank" rel="noopener noreferrer">開車導航｜伊達邵碼頭</a>
+              </div>
             </div>
           </li>
           <li class="item">
             <div class="thumb img-night"><div class="thumb-label">晚餐時段</div></div>
             <div class="info">
               <div class="time">18:30–20:00</div>
-              <div class="title">晚餐時間</div>
-              <div class="desc">直接在伊達邵商圈附近吃就好，不用再開車移動。4 個人找一間能坐著慢慢吃的店最適合。</div>
+              <div class="title">晚餐</div>
+              <div class="desc">伊達邵商圈覓食，不必再開車。</div>
+              <div class="nav-row">
+                <a class="nav-btn" data-nav="伊達邵碼頭" href="#" target="_blank" rel="noopener noreferrer">開車導航｜伊達邵（商圈起點）</a>
+              </div>
             </div>
           </li>
           <li class="item">
             <div class="thumb img-hotel"><div class="thumb-label">夜景收尾</div></div>
             <div class="info">
               <div class="time">20:00 之後</div>
-              <div class="title">回房自由活動</div>
-              <div class="desc">聊天、小酌、看夜景都很適合。這間住宿的價值其實就在晚上，把節奏放慢會比再多塞一個景點更值得。</div>
+              <div class="title">回飯店｜自由活動</div>
+              <div class="desc">聊天、看夜景即可；今晚以放鬆為主。</div>
+              <div class="nav-row">
+                <a class="nav-btn" data-nav="湖悅景觀旅店　南投縣魚池鄉義勇街113號" href="#" target="_blank" rel="noopener noreferrer">開車導航｜湖悅</a>
+              </div>
             </div>
           </li>
         </ol>
-
-        <div class="tips">
-          <div class="tip">
-            <h3>Day 1 重點提醒</h3>
-            <p>大件行李建議直接放車上，不要帶進九族。這樣行程會更順，也不用先繞去飯店寄放。</p>
-          </div>
-          <div class="tip">
-            <h3>Day 1 節奏建議</h3>
-            <p>第一天不要再硬塞太多景點，把傍晚與晚上留給湖景、散步與放鬆，整體感受會最好。</p>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -582,103 +1170,362 @@
       <div class="slide-cover cover-d2">
         <div class="slide-content">
           <div class="slide-label">DAY 2 / MOUNTAIN & CITY</div>
-          <h2>清境農場 × 台中住宿夜市</h2>
-          <p>第二天以「山景 + 城市感」收尾，早上上清境看風景、拍照、吃午餐，下午回台中入住，晚上留給夜市與輕鬆散步。</p>
+          <h2>清境 × 回台中 × 旱溪夜市</h2>
+          <p>上午清境走走 → 清境午餐 → 下午下山回台中（可加 0～1 個順路點）→ 晚上四人逛旱溪夜市 → 散場後兩人回家、兩人住橙居。</p>
         </div>
       </div>
 
-      <div class="meta-row">
-        <div class="chip">建議早點出發</div>
-        <div class="chip">清境以放鬆拍照為主</div>
-        <div class="chip">晚上建議住逢甲／西屯</div>
-      </div>
+      <details class="meta-panel">
+        <summary>
+          <span class="meta-panel-title"><span class="deck-full-label">Day 2｜</span>重點</span>
+          <span class="meta-panel-chev" aria-hidden="true"></span>
+        </summary>
+        <ul class="meta-list">
+          <li><strong>清境</strong> 輕鬆看景即可；山路彎多，時間抓鬆一點</li>
+          <li><strong>晚餐</strong> 四人一起：旱溪夜市</li>
+          <li><strong>夜市後</strong> 兩人回家；兩人住橙居（隔天飯店早餐）</li>
+        </ul>
+      </details>
 
       <div class="body">
-        <h3 class="section-title">Day 2 行程時間軸</h3>
+        <h3 class="section-title"><span class="deck-full-label">Day 2 </span>時間軸</h3>
         <ol class="timeline">
           <li class="item">
-            <div class="thumb img-lunch"><div class="thumb-label">早餐與退房</div></div>
+            <div class="thumb img-hotel"><div class="thumb-label">早餐與退房</div></div>
             <div class="info">
               <div class="time">08:00–09:00</div>
-              <div class="title">起床、早餐、整理退房</div>
-              <div class="desc">建議不要拖太晚，第二天還有山路與回台中的路程，早一點出發會比較舒服。</div>
+              <div class="title">早餐、退房</div>
+              <div class="desc">建議早點出發，後面還有山路。（人在湖悅，無導航鈕）</div>
             </div>
           </li>
           <li class="item">
             <div class="thumb img-road"><div class="thumb-label">日月潭前往清境</div></div>
             <div class="info">
               <div class="time">09:00–10:30</div>
-              <div class="title">從日月潭出發，前往清境農場</div>
-              <div class="desc">這段山路抓約 1.5 小時上下較安全，途中彎路較多，建議車上先備水和小零食。</div>
+              <div class="title">日月潭 → 清境</div>
+              <div class="desc">山路約 1.5 小時；彎多，車上備水與小點心。</div>
+              <div class="nav-row">
+                <a class="nav-btn" data-nav="清境農場　南投縣仁愛鄉仁和路170號" href="#" target="_blank" rel="noopener noreferrer">開車導航｜清境農場</a>
+              </div>
             </div>
           </li>
           <li class="item">
             <div class="thumb img-farm"><div class="thumb-label">清境農場</div></div>
             <div class="info">
               <div class="time">10:30–12:30</div>
-              <div class="title">清境農場散步、看景、拍照</div>
-              <div class="desc">清境不建議排太滿，慢慢走、拍拍山景與合照就很好，這樣才不會玩到太累。</div>
+              <div class="title">清境農場</div>
+              <div class="desc">別排太滿，慢慢逛就好。（進園後同區活動，無導航鈕）</div>
             </div>
           </li>
           <li class="item">
             <div class="thumb img-mountain"><div class="thumb-label">清境午餐</div></div>
             <div class="info">
               <div class="time">12:30–13:30</div>
-              <div class="title">清境附近午餐</div>
-              <div class="desc">建議直接在附近吃完再下山，避免餓著趕路。可以找景觀餐廳或簡單熱食。</div>
+              <div class="title">清境午餐（擇一）</div>
+              <div class="desc">下列為好搜的選項；營業與排隊以現場為準。</div>
+              <div class="nav-row">
+                <a class="nav-btn" data-nav="清境農場國民賓館　南投縣仁愛鄉定遠巷25號" href="#" target="_blank" rel="noopener noreferrer">國民賓館餐飲（合菜／簡餐）</a>
+                <a class="nav-btn" data-nav="魯媽媽雲南擺夷料理　南投縣仁愛鄉大同村仁和路210-2-1號" href="#" target="_blank" rel="noopener noreferrer">魯媽媽（雲南擺夷菜）</a>
+                <a class="nav-btn" data-nav="伊拿谷景觀餐廳　南投縣仁愛鄉大同村仁和路信義巷36之1附1號" href="#" target="_blank" rel="noopener noreferrer">伊拿谷（甕缸雞／合菜）</a>
+              </div>
+              <p class="nav-hint is-block">搜不到可改搜「清境午餐」或請店家幫忙定位。</p>
             </div>
           </li>
           <li class="item">
-            <div class="thumb img-city"><div class="thumb-label">回台中</div></div>
+            <div class="thumb img-city"><div class="thumb-label">下山往台中</div></div>
             <div class="info">
-              <div class="time">13:30–16:00</div>
-              <div class="title">下山回台中，前往住宿地點</div>
-              <div class="desc">從清境回台中抓約 2 到 2.5 小時比較保險。晚上若要逛夜市，住台中市區會最方便。</div>
+              <div class="time">13:30–17:00（彈性）</div>
+              <div class="title">下山回台中（可順路停）</div>
+              <div class="desc">主線：霧社—埔里—國六。順路點<strong>選 0～1 個</strong>即可，別卡到夜市。</div>
+              <div class="nav-row">
+                <a class="nav-btn" data-nav="埔里酒廠　南投縣埔里鎮中山路三段178號" href="#" target="_blank" rel="noopener noreferrer">順路｜埔里酒廠</a>
+                <a class="nav-btn" data-nav="紙教堂　南投縣埔里鎮桃米里桃米巷555號" href="#" target="_blank" rel="noopener noreferrer">順路｜紙教堂（桃米）</a>
+                <a class="nav-btn" data-nav="妮娜巧克力夢想城堡　南投縣埔里鎮內埔路103號" href="#" target="_blank" rel="noopener noreferrer">順路｜妮娜巧克力城堡</a>
+              </div>
             </div>
           </li>
           <li class="item">
-            <div class="thumb img-hotel"><div class="thumb-label">台中 check-in</div></div>
-            <div class="info">
-              <div class="time">16:00–17:00</div>
-              <div class="title">台中飯店 check-in、休息一下</div>
-              <div class="desc">第二天通常會比第一天累，因為有山路和移動。先回飯店整理一下，再出門會舒服很多。</div>
-            </div>
-          </li>
-          <li class="item">
-            <div class="thumb img-market"><div class="thumb-label">夜市行程</div></div>
+            <div class="thumb img-market"><div class="thumb-label">旱溪夜市</div></div>
             <div class="info">
               <div class="time">17:30–20:30</div>
-              <div class="title">夜市行程：逢甲夜市或一中街</div>
-              <div class="desc">想熱鬧、吃的多、逛得久，建議逢甲；想集中一點、一樣好逛，一中街也很適合。</div>
+              <div class="title">旱溪夜市（四人晚餐）</div>
+              <div class="desc">停車靠周邊路格／停車場；假日建議早到。</div>
+              <div class="nav-row">
+                <a class="nav-btn" data-nav="旱溪夜市　台中市東區旱溪東路一段" href="#" target="_blank" rel="noopener noreferrer">開車導航｜旱溪夜市</a>
+              </div>
             </div>
           </li>
           <li class="item">
-            <div class="thumb img-city"><div class="thumb-label">晚間收尾</div></div>
+            <div class="thumb img-hotel-tx"><div class="thumb-label">夜市後</div></div>
             <div class="info">
               <div class="time">20:30 之後</div>
-              <div class="title">自由活動</div>
-              <div class="desc">回飯店休息、在市區散步都可以。這段就別再塞景點，讓第二晚收得輕鬆一點。</div>
+              <div class="title">夜市後分流</div>
+              <div class="desc">兩人回台中住家；兩人進橙居放行李。隔天市區靠 YouBike／公車／計程車。</div>
+              <div class="nav-row">
+                <a class="nav-btn" data-nav="橙居台中　台中市西區忠明南路98號" href="#" target="_blank" rel="noopener noreferrer">開車導航｜橙居</a>
+              </div>
             </div>
           </li>
         </ol>
-
-        <div class="tips">
-          <div class="tip">
-            <h3>Day 2 重點提醒</h3>
-            <p>清境的重點是風景與拍照，不是跑很多點。排太滿只會讓下午回台中變得很趕。</p>
-          </div>
-          <div class="tip">
-            <h3>台中住宿建議</h3>
-            <p>如果晚上主要想逛夜市，建議住逢甲、西屯或市區交通方便的地方，整體動線最順。</p>
-          </div>
-        </div>
       </div>
     </section>
+
+    <section class="panel" id="d3">
+      <div class="slide-cover cover-d3">
+        <div class="slide-content">
+          <div class="slide-label">DAY 3 / SLOW CITY & GATHER</div>
+          <h2>橙居早餐｜西區散步｜茶六｜找家家</h2>
+          <p>這天不開車，靠 YouBike、公車、短程計程車。早餐後在西區晃晃，11:30 茶六，下午和家家會合。</p>
+        </div>
+      </div>
+
+      <details class="meta-panel">
+        <summary>
+          <span class="meta-panel-title"><span class="deck-full-label">Day 3｜</span>重點</span>
+          <span class="meta-panel-chev" aria-hidden="true"></span>
+        </summary>
+        <ul class="meta-list">
+          <li><strong>移動</strong> YouBike、公車、計程車；導航鈕多用「步行」方便認路</li>
+          <li><strong>午餐</strong> 茶六公益店 11:30（建議先訂位）</li>
+          <li><strong>家家</strong> 時間地點自行約；此頁不預設導航終點</li>
+        </ul>
+      </details>
+
+      <div class="body">
+        <h3 class="section-title"><span class="deck-full-label">Day 3 </span>時間軸</h3>
+        <ol class="timeline">
+          <li class="item">
+            <div class="thumb img-hotel-tx"><div class="thumb-label">飯店早餐</div></div>
+            <div class="info">
+              <div class="time">依飯店早餐時段（建議早）</div>
+              <div class="title">橙居早餐</div>
+              <div class="desc">吃飽再出門。（無導航鈕）</div>
+            </div>
+          </li>
+          <li class="item">
+            <div class="thumb img-greenway"><div class="thumb-label">附近晃晃</div></div>
+            <div class="info">
+              <div class="time">早餐後–11:00 前（彈性）</div>
+              <div class="title">西區散步｜草悟道、審計、勤美（擇二）</div>
+              <div class="desc">三處很近，慢慢走即可。點標籤開 Google 地圖（步行）。</div>
+              <div class="nav-row">
+                <a class="nav-btn" data-travel="walking" data-nav="草悟道　台中市西區" href="#" target="_blank" rel="noopener noreferrer">步行導航｜草悟道</a>
+                <a class="nav-btn" data-travel="walking" data-nav="審計新村　台中市西區民生路368號" href="#" target="_blank" rel="noopener noreferrer">步行導航｜審計新村</a>
+                <a class="nav-btn" data-travel="walking" data-nav="勤美誠品綠園道　台中市西區公益路68號" href="#" target="_blank" rel="noopener noreferrer">步行導航｜勤美誠品周邊</a>
+              </div>
+              <p class="nav-hint is-block">挑兩個就好。</p>
+            </div>
+          </li>
+          <li class="item">
+            <div class="thumb img-tea"><div class="thumb-label">茶六公益店</div></div>
+            <div class="info">
+              <div class="time">11:30</div>
+              <div class="title">茶六公益店｜午餐</div>
+              <div class="desc">示意圖非實拍。建議先訂位；若改開車，地圖改選開車模式即可。</div>
+              <div class="nav-row">
+                <a class="nav-btn" data-travel="walking" data-nav="茶六燒肉堂公益店　台中市西區公益路268號" href="#" target="_blank" rel="noopener noreferrer">步行導航｜茶六公益店</a>
+              </div>
+            </div>
+          </li>
+          <li class="item">
+            <div class="thumb img-meet"><div class="thumb-label">與家家會合</div></div>
+            <div class="info">
+              <div class="time">14:00</div>
+              <div class="title">與家家會合</div>
+              <div class="desc">與家家自行約地點；用訊息互傳定位最實際。（無預設導航鈕）</div>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+  </div>
+
+  <div
+    class="timeline-deck"
+    id="timeline-deck"
+    hidden
+    role="toolbar"
+    aria-label="行程簡報切換"
+  >
+    <button type="button" class="timeline-deck__nav" id="deck-prev" aria-label="上一段行程">
+      ‹
+    </button>
+    <div class="timeline-deck__meta">
+      <span class="timeline-deck__count" id="deck-count"></span>
+      <div
+        class="timeline-deck__dots"
+        id="deck-dots"
+        role="tablist"
+        aria-label="時間軸段落"
+      ></div>
+      <span class="timeline-deck__subtitle" id="deck-subtitle"></span>
+      <span class="timeline-deck__hint" id="deck-hint">左右滑動可切換</span>
+    </div>
+    <button type="button" class="timeline-deck__nav" id="deck-next" aria-label="下一段行程">
+      ›
+    </button>
   </div>
 
   <script>
     const buttons = document.querySelectorAll('.tab-btn');
     const panels = document.querySelectorAll('.panel');
+    const MAPS_DIR_BASE = 'https://www.google.com/maps/dir/?api=1';
+
+    function wireMapLinks() {
+      document.querySelectorAll('a[data-nav]').forEach(a => {
+        const q = a.getAttribute('data-nav');
+        const mode = a.getAttribute('data-travel') || 'driving';
+        if (q) {
+          const url = `${MAPS_DIR_BASE}&travelmode=${encodeURIComponent(mode)}&destination=${encodeURIComponent(q)}`;
+          a.setAttribute('href', url);
+        }
+      });
+    }
+
+    wireMapLinks();
+
+    const deckMq = window.matchMedia('(max-width: 720px)');
+    const deckEl = document.getElementById('timeline-deck');
+    const deckPrev = document.getElementById('deck-prev');
+    const deckNext = document.getElementById('deck-next');
+    const deckCount = document.getElementById('deck-count');
+    const deckDots = document.getElementById('deck-dots');
+    const deckSubtitle = document.getElementById('deck-subtitle');
+    const deckHint = document.getElementById('deck-hint');
+    const deckIndices = { d1: 0, d2: 0, d3: 0 };
+    let touchStartX = null;
+
+    function getActivePanel() {
+      return document.querySelector('.panel.active');
+    }
+
+    function clearDeckClasses() {
+      document.querySelectorAll('.timeline').forEach(tl => {
+        tl.classList.remove('timeline--deck');
+        tl.querySelectorAll('.item').forEach(li => li.classList.remove('is-deck-active'));
+      });
+    }
+
+    function syncMetaPanelsOpen() {
+      document.querySelectorAll('details.meta-panel').forEach(d => {
+        d.open = true;
+      });
+    }
+
+    function applyDeckMode() {
+      const on = deckMq.matches;
+      document.documentElement.classList.toggle('deck-mode', on);
+      deckEl.classList.toggle('is-visible', on);
+      deckEl.hidden = !on;
+      syncMetaPanelsOpen();
+      if (!on) {
+        clearDeckClasses();
+        deckDots.replaceChildren();
+        return;
+      }
+      document.querySelectorAll('.panel .timeline').forEach(tl => tl.classList.add('timeline--deck'));
+      refreshDeckUi();
+    }
+
+    function refreshDeckUi() {
+      if (!deckMq.matches) return;
+      document.querySelectorAll('.timeline > .item').forEach(li => li.classList.remove('is-deck-active'));
+      const panel = getActivePanel();
+      if (!panel) return;
+      const pid = panel.id;
+      const timeline = panel.querySelector('.timeline');
+      if (!timeline) return;
+      const items = [...timeline.querySelectorAll(':scope > .item')];
+      const n = items.length;
+      if (n === 0) return;
+      let i = deckIndices[pid] ?? 0;
+      i = Math.max(0, Math.min(i, n - 1));
+      deckIndices[pid] = i;
+      items.forEach((el, idx) => {
+        el.classList.toggle('is-deck-active', idx === i);
+      });
+      const active = items[i];
+      const title = active?.querySelector('.title')?.textContent?.trim() || '';
+      const time = active?.querySelector('.time')?.textContent?.trim() || '';
+      deckCount.textContent = `第 ${i + 1} 段 · 共 ${n} 段`;
+      deckSubtitle.textContent = time ? `${time}｜${title}` : title;
+      deckHint.textContent =
+        i === 0 && n > 1
+          ? '點圓點或向左滑：下一段'
+          : i >= n - 1
+            ? '點圓點或向右滑：上一段'
+            : '點圓點跳段 · 左右滑切換';
+      deckPrev.disabled = i <= 0;
+      deckNext.disabled = i >= n - 1;
+
+      deckDots.replaceChildren();
+      for (let j = 0; j < n; j++) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = `timeline-deck__dot${j === i ? ' is-active' : ''}`;
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-selected', j === i ? 'true' : 'false');
+        dot.setAttribute('aria-label', `第 ${j + 1} 段，共 ${n} 段`);
+        dot.addEventListener('click', () => {
+          deckIndices[pid] = j;
+          refreshDeckUi();
+          items[j]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        });
+        deckDots.appendChild(dot);
+      }
+    }
+
+    function deckStep(delta) {
+      if (!deckMq.matches) return;
+      const panel = getActivePanel();
+      if (!panel) return;
+      const pid = panel.id;
+      const items = [...panel.querySelectorAll('.timeline > .item')];
+      const n = items.length;
+      if (n === 0) return;
+      let i = deckIndices[pid] ?? 0;
+      i = Math.max(0, Math.min(i + delta, n - 1));
+      deckIndices[pid] = i;
+      refreshDeckUi();
+      const active = items[i];
+      active?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    deckPrev.addEventListener('click', () => deckStep(-1));
+    deckNext.addEventListener('click', () => deckStep(1));
+
+    document.addEventListener(
+      'touchstart',
+      e => {
+        if (!deckMq.matches || deckEl.hidden) return;
+        const t = e.target;
+        if (!t.closest('.panel.active .timeline')) return;
+        touchStartX = e.changedTouches[0].screenX;
+      },
+      { passive: true }
+    );
+
+    document.addEventListener(
+      'touchend',
+      e => {
+        if (touchStartX == null || !deckMq.matches || deckEl.hidden) return;
+        const t = e.target;
+        if (!t.closest('.panel.active .timeline')) {
+          touchStartX = null;
+          return;
+        }
+        const x = e.changedTouches[0].screenX;
+        const dx = x - touchStartX;
+        touchStartX = null;
+        if (Math.abs(dx) < 48) return;
+        if (dx < 0) deckStep(1);
+        else deckStep(-1);
+      },
+      { passive: true }
+    );
+
+    deckMq.addEventListener('change', applyDeckMode);
+    applyDeckMode();
 
     buttons.forEach(button => {
       button.addEventListener('click', () => {
@@ -687,6 +1534,7 @@
         panels.forEach(panel => panel.classList.remove('active'));
         button.classList.add('active');
         document.getElementById(target).classList.add('active');
+        if (deckMq.matches) refreshDeckUi();
       });
     });
   </script>
