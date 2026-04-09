@@ -691,6 +691,13 @@
 
     .timeline-deck.is-visible {
       display: flex;
+      /* 讓版面間隙可穿透點到下方內容；按鈕／圓點再開回事件 */
+      pointer-events: none;
+    }
+
+    .timeline-deck.is-visible .timeline-deck__nav,
+    .timeline-deck.is-visible .timeline-deck__dot {
+      pointer-events: auto;
     }
 
     .timeline-deck__nav {
@@ -844,7 +851,13 @@
         padding-top: calc(10px + env(safe-area-inset-top, 0px));
         padding-left: 0;
         padding-right: 0;
-        padding-bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+        /* 底部簡報列＋安全區，避免導航鈕落在固定列下方難以點擊 */
+        padding-bottom: calc(180px + env(safe-area-inset-bottom, 0px));
+      }
+
+      html.deck-mode .tab-bar {
+        position: relative;
+        z-index: 2;
       }
 
       html.deck-mode .hero-inner-pad {
@@ -1034,7 +1047,7 @@
         <div class="tab-bar">
           <button class="tab-btn active" data-tab="d1">
             <strong>Day 1</strong>
-            <span>5/1 · 九族 → 住湖悅 → 伊達邵傍晚散步</span>
+            <span>5/1 · 台鐵新竹→沙鹿 → 九族 → 住湖悅 → 伊達邵</span>
           </button>
           <button class="tab-btn" data-tab="d2">
             <strong>Day 2</strong>
@@ -1053,7 +1066,7 @@
         <div class="slide-content">
           <div class="slide-label">DAY 1 / PLAY & STAY</div>
           <h2>九族 × 湖悅景觀旅店</h2>
-          <p>流程很單純：白天玩九族 → 下午 check-in 湖悅 → 晚上步行到伊達邵看湖、吃晚餐，不趕路。</p>
+          <p>流程很單純：台鐵新竹→沙鹿會合後出發 → 白天玩九族 → 下午 check-in 湖悅 → 晚上步行到伊達邵看湖、吃晚餐，不趕路。</p>
         </div>
       </div>
 
@@ -1063,6 +1076,7 @@
           <span class="meta-panel-chev" aria-hidden="true"></span>
         </summary>
         <ul class="meta-list">
+          <li><strong>台鐵</strong> 新竹火車站 07:37 發車 → 沙鹿火車站 08:57 抵達，再與同伴會合上車</li>
           <li><strong>住</strong> 湖悅景觀旅店（湖岸第一排）｜入住 15:00、退房 11:00</li>
           <li><strong>順序</strong> 九族 → 湖悅 → 伊達邵碼頭／商圈晚餐</li>
           <li><strong>晚上</strong> 飯店離碼頭近，多用走的即可</li>
@@ -1073,22 +1087,23 @@
         <h3 class="section-title"><span class="deck-full-label">Day 1 </span>時間軸</h3>
         <ol class="timeline">
           <li class="item">
-            <div class="thumb img-train"><div class="thumb-label">新竹高鐵出發</div></div>
+            <div class="thumb img-train"><div class="thumb-label">台鐵</div></div>
             <div class="info">
-              <div class="time">08:00–09:00</div>
-              <div class="title">新竹高鐵 → 台中</div>
-              <div class="desc">抓早一點的高鐵；到台中與同伴會合後上車出發。</div>
+              <div class="time">07:37–08:57</div>
+              <div class="title">新竹火車站 → 沙鹿火車站</div>
+              <div class="desc">搭台鐵直達沙鹿；抵達後與同伴會合再上車。（月台與車次以當日對號／時刻表為準）</div>
               <div class="nav-row">
-                <a class="nav-btn" data-nav="高鐵新竹站" href="#" target="_blank" rel="noopener noreferrer">開車導航</a>
+                <a class="nav-btn" data-nav="新竹車站　新竹市東區民族路2號" href="#" target="_blank" rel="noopener noreferrer">開車導航｜新竹站</a>
+                <a class="nav-btn" data-nav="沙鹿車站　台中市沙鹿區中山路494號" href="#" target="_blank" rel="noopener noreferrer">開車導航｜沙鹿站</a>
               </div>
             </div>
           </li>
           <li class="item">
-            <div class="thumb img-hsr-tc"><div class="thumb-label">台中高鐵會合</div></div>
+            <div class="thumb img-road"><div class="thumb-label">沙鹿會合</div></div>
             <div class="info">
-              <div class="time">09:20–10:30</div>
-              <div class="title">台中高鐵會合 → 開往九族</div>
-              <div class="desc">車程約 1 小時。飯店 15:00 後才能入住，故先玩九族。</div>
+              <div class="time">約 9:00–10:30</div>
+              <div class="title">沙鹿會合 → 開往九族</div>
+              <div class="desc">出站會合後出發；往九族車程約 1 小時。飯店 15:00 後才能入住，故先玩九族。</div>
             </div>
           </li>
           <li class="item">
@@ -1405,6 +1420,11 @@
     const deckIndices = { d1: 0, d2: 0, d3: 0 };
     let touchStartX = null;
 
+    function timelineItems(timeline) {
+      if (!timeline) return [];
+      return Array.from(timeline.children).filter(el => el.matches('li.item'));
+    }
+
     function getActivePanel() {
       return document.querySelector('.panel.active');
     }
@@ -1439,15 +1459,16 @@
 
     function refreshDeckUi() {
       if (!deckMq.matches) return;
-      document.querySelectorAll('.timeline > .item').forEach(li => li.classList.remove('is-deck-active'));
       const panel = getActivePanel();
       if (!panel) return;
       const pid = panel.id;
       const timeline = panel.querySelector('.timeline');
-      if (!timeline) return;
-      const items = [...timeline.querySelectorAll(':scope > .item')];
+      const items = timelineItems(timeline);
       const n = items.length;
       if (n === 0) return;
+
+      document.querySelectorAll('.timeline.timeline--deck > .item').forEach(li => li.classList.remove('is-deck-active'));
+
       let i = deckIndices[pid] ?? 0;
       i = Math.max(0, Math.min(i, n - 1));
       deckIndices[pid] = i;
@@ -1490,7 +1511,7 @@
       const panel = getActivePanel();
       if (!panel) return;
       const pid = panel.id;
-      const items = [...panel.querySelectorAll('.timeline > .item')];
+      const items = timelineItems(panel.querySelector('.timeline'));
       const n = items.length;
       if (n === 0) return;
       let i = deckIndices[pid] ?? 0;
